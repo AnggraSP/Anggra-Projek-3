@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+@keyframes bounce-vertical {
+  0%, 100% {
+    top: 0;
+    transform: scaleY(1);
+  }
+  49% {
+    transform: scaleY(1);
+  }
+  50% {
+    top: calc(99% - 20px);
+    transform: scaleY(-1);
+  }
+  99% {
+    transform: scaleY(-1);
+  }
+}
+
+.animate-bounce-vertical {
+  animation: bounce-vertical 3s infinite;
+}
