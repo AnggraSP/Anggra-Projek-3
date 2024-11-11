@@ -1,19 +1,23 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import * as tf from "@tensorflow/tfjs";
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import * as tf from '@tensorflow/tfjs';
 import Scan from '../components/elements/Scan';
 
 export default function ScanSampah() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [model, setModel] = useState<tf.LayersModel | null>(null);
   const [prediction, setPrediction] = useState<string | null>(null);
+  const [imageData, setImageData] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     async function loadModel() {
       try {
-        const loadedModel = await tf.loadLayersModel("/web_model/model.json");
+        const loadedModel = await tf.loadLayersModel('/web_model/model.json');
         setModel(loadedModel);
       } catch (err) {
         console.error("Error loading model: ", err);
@@ -43,39 +47,73 @@ export default function ScanSampah() {
     };
   }, []);
 
+  const processImage = async (imageData: string) => {
+    if (model) {
+      const img = new Image();
+      img.src = imageData;
+      img.onload = async () => {
+        // Preprocess image
+        const tensor = tf.browser
+          .fromPixels(img)
+          .resizeNearestNeighbor([256, 256])
+          .toFloat()
+          .div(255.0) // Normalize pixels to 0-1 range
+          .expandDims();
+
+        // Get prediction probability
+        const predictions = model.predict(tensor) as tf.Tensor;
+        const probability = predictions.dataSync()[0]; // Get first element as probability
+        console.log("Prediction probability:", probability); // Debug log
+
+        // Classify based on 0.5 threshold
+        const predictionResult = probability > 0.5 ? "Anorganik" : "Organik";
+
+        // Cleanup tensors
+        tensor.dispose();
+        predictions.dispose();
+
+        // Store results and navigate
+        sessionStorage.setItem("imageData", imageData);
+        sessionStorage.setItem("prediction", predictionResult);
+        router.push("/hasil-scan");
+      };
+    }
+  };
+
   const handleCapture = () => {
-    if (videoRef.current && model) {
-      const canvas = document.createElement("canvas");
+    if (videoRef.current) {
+      const canvas = document.createElement('canvas');
       canvas.width = videoRef.current.videoWidth;
       canvas.height = videoRef.current.videoHeight;
-      const context = canvas.getContext("2d");
+      const context = canvas.getContext('2d');
       if (context) {
         context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-        const imageData = canvas.toDataURL("image/png");
-
-        // Preprocess the image
-        const img = new Image();
-        img.src = imageData;
-        img.onload = async () => {
-          const tensor = tf.browser
-            .fromPixels(img)
-            .resizeNearestNeighbor([256, 256]) // Adjust the size to match your model's input size
-            .toFloat()
-            .expandDims();
-
-          // Make prediction
-          const predictions = model.predict(tensor) as tf.Tensor;
-          const predictedClass = predictions.argMax(-1).dataSync()[0];
-
-          // Set prediction result
-          setPrediction(predictedClass > 0.5 ? "Organik" : "Anorganik");
-        };
+        const imageData = canvas.toDataURL('image/png');
+        setImageData(imageData);
+        processImage(imageData);
       }
     }
   };
 
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const imageData = e.target?.result as string;
+        setImageData(reader.result as string);
+        processImage(imageData);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleButtonClick = () => {
+    fileInputRef.current?.click();
+  };
+
   return (
-    <div className="absolute left-0 top-0">
+    <div className="w-md absolute left-1/2 top-0 w-full max-w-md -translate-x-1/2 md:max-w-md">
       <video
         ref={videoRef}
         autoPlay
@@ -93,7 +131,7 @@ export default function ScanSampah() {
         className="absolute left-4 top-4 rounded-lg bg-putih px-2 py-2 text-xs font-bold text-hijau"
       >
         <svg
-          className="h-6 w-6 "
+          className="h-6 w-6"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -110,7 +148,10 @@ export default function ScanSampah() {
           />
         </svg>
       </Link>
-      <button className="absolute right-4 top-4 flex size-10 items-center justify-center rounded-full bg-hijau px-2 py-2 text-xs font-bold text-putih">
+      <button
+        onClick={handleButtonClick}
+        className="absolute right-4 top-4 flex size-10 items-center justify-center rounded-full bg-hijau px-2 py-2 text-xs font-bold text-putih"
+      >
         <svg
           width={19}
           height={16}
@@ -162,11 +203,13 @@ export default function ScanSampah() {
           </svg>
         </div>
       </div>
-      {prediction && (
-        <div className="absolute top-5 left-1/2 -translate-x-1/2 transform rounded-lg bg-white p-4 text-black">
-          Sampah {prediction}
-        </div>
-      )}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handleFileChange}
+      />
     </div>
   );
 }
