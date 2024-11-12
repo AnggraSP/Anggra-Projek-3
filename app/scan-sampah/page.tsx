@@ -34,8 +34,8 @@ export default function ScanSampah() {
             // height: { ideal: 1080 }
           },
         };
-        
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
