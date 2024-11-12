@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Box(props)  {
   return (
-    <button className="rounded-full flex shadow-lg border flex items-center gap-2 px-8 py-3"
+    <button className="rounded-full flex bg-putih shadow-lg border flex items-center gap-2 px-8 py-3"
       { ...props }
     >
       <svg

@@ -26,6 +26,15 @@ export default function ScanSampah() {
 
     async function getMedia() {
       try {
+        const constraints = {
+          video: {
+            facingMode: "environment", // Uses back camera
+            // Optional: add other constraints
+            // width: { ideal: 1920 },
+            // height: { ideal: 1080 }
+          },
+        };
+        
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
