@@ -65,6 +65,12 @@ export default function ScanSampah() {
         const probability = predictions.dataSync()[0]; // Get first element as probability
         console.log("Prediction probability:", probability); // Debug log
 
+        // Calculate accuracy percentage
+        const accuracy =
+          probability > 0.5
+            ? (probability * 100).toFixed(2)
+            : ((1 - probability) * 100).toFixed(2);
+
         // Classify based on 0.5 threshold
         const predictionResult = probability > 0.5 ? "Anorganik" : "Organik";
 
@@ -75,6 +81,8 @@ export default function ScanSampah() {
         // Store results and navigate
         sessionStorage.setItem("imageData", imageData);
         sessionStorage.setItem("prediction", predictionResult);
+        sessionStorage.setItem("accuracy", accuracy);
+        
         router.push("/hasil-scan");
       };
     }
