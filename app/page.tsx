@@ -9,9 +9,10 @@ import Organik from "./components/elements/Organik";
 import Kertas from "./components/elements/Kertas";
 import Berbahaya from "./components/elements/Berbahaya.jsx";
 import BankSampah from "./components/components/BankSampah";
+import ScanFloating from "./components/elements/ScanFloating";
 import Link from "next/link";
 
-export default function Home() { 
+export default function Home() {
   return (
     <>
       <div className="mb-4 flex gap-8 rounded-md bg-hijau p-4">
@@ -28,7 +29,7 @@ export default function Home() {
           >
             <span>Mulai Scan</span>
             <svg
-              className="h-6 w-6 text-putih"
+              className="size-6 text-putih"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -57,8 +58,8 @@ export default function Home() {
       <div className="">
         <Title text="Sampah Terbaru" />
         <div className="flex justify-around p-8">
-            <SampahOrganik />
-            <SampahAnorganik />
+          <SampahOrganik />
+          <SampahAnorganik />
         </div>
       </div>
 
@@ -81,6 +82,12 @@ export default function Home() {
           <BankSampah />
         </div>
       </div>
+      <Link
+        href={"/scan-sampah"}
+        className="fixed bottom-5 left-1/2 -translate-x-1/2"
+      >
+        <ScanFloating />
+      </Link>
     </>
   );
 }

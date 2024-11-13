@@ -6,6 +6,7 @@ import TempatSampah from "../components/elements/TempatSampah";
 import SampahOrganik from "../components/elements/SampahOrganik";
 import ScanLagi from "../components/elements/ScanLagi";
 import SampahAnorganik from "../components/elements/SampahAnorganik";
+import Link from "next/link";
 
 
 export default function HasilScan() {
@@ -57,9 +58,11 @@ export default function HasilScan() {
           {prediction == "Organik" ? <SampahOrganik /> : <SampahAnorganik />}
         </div>
       </div>
-      <div className="fixed bottom-10">
-        <ScanLagi onClick={() => router.push("/scan-sampah")} />
-      </div>
+      <Link
+        href={"/scan-sampah"}
+        className="fixed bottom-10">
+        <ScanLagi />
+      </Link>
     </div>
   );
 }
