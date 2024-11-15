@@ -13,7 +13,7 @@ import Baterai from "../components/elements/Baterai";
 export default function KategoriSampah() {
   
     return (
-      <div className="gap-ve grid grid-cols-3 gap-y-12">
+      <div className="grid grid-cols-3 gap-y-12">
         <Plastik />
         <Kaca />
         <Logam />
