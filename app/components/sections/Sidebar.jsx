@@ -310,7 +310,7 @@ export default function Sidebar() {
                     <span class="ms-3">Bank sampah</span>
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <a
                     href="#"
                     className="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
@@ -329,7 +329,7 @@ export default function Sidebar() {
                     </svg>
                     <span class="ms-3">Artikel</span>
                   </a>
-                </li>
+                </li> */}
                 <li>
                   <a
                     href="#"

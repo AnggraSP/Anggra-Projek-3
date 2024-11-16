@@ -56,14 +56,14 @@ export default function Home() {
       </div>
 
       <div className="">
-        <Title text="Sampah Terbaru" />
+        <Title text="Kategori Sampah" />
         <div className="flex justify-around p-8">
           <SampahOrganik />
           <SampahAnorganik />
         </div>
       </div>
 
-      <div className="">
+      {/* <div className="">
         <Title text="Kategori Sampah" />
         <div className="flex w-full justify-between p-4">
           <Plastik />
@@ -71,7 +71,7 @@ export default function Home() {
           <Kertas />
           <Berbahaya />
         </div>
-      </div>
+      </div> */}
 
       <div className="">
         <Title text="Bank Sampah" />
