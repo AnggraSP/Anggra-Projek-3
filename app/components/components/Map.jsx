@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import dynamic from "next/dynamic";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { useRouter } from "next/navigation";
 
 // Fix default marker icon issue
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -51,9 +52,15 @@ const Map = ({ currentLocation, locations }) => {
     });
   }, []);
 
+  const router = useRouter();
+
+  const handleLocationClick = (locationId) => {
+    router.push(`/bank-sampah/${locationId}`);
+  };
+
   return (
     <MapContainer
-      center={currentLocation || [-6.2, 106.816666]}
+      center={currentLocation || [-6.5979956, 106.7957516]}
       zoom={13}
       scrollWheelZoom={true}
       style={{ height: "100%", width: "100%" }}
@@ -76,7 +83,14 @@ const Map = ({ currentLocation, locations }) => {
           key={location._id}
           position={[location.latitude, location.longitude]}
         >
-          <Popup>{location.nama}</Popup>
+          <Popup>
+            <div
+              onClick={() => handleLocationClick(location._id)}
+              className="cursor-pointer hover:text-blue-500"
+            >
+              {location.nama ?? "Lokasi Bank Sampah"}
+            </div>
+          </Popup>
         </Marker>
       ))}
     </MapContainer>

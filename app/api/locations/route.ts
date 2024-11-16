@@ -7,7 +7,7 @@ export async function GET() {
     
     const locations = await collection
       .find({})
-      .project({ name: 1, latitude: 1, longitude: 1 })
+      .project({ nama: 1, alamat: 1, latitude: 1, longitude: 1 })
       .toArray();
 
     return NextResponse.json(locations);

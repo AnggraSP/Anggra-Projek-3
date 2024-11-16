@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Title from "./components/elements/Title";
 import SampahOrganik from "./components/elements/SampahOrganik";
@@ -13,6 +14,41 @@ import ScanFloating from "./components/elements/ScanFloating";
 import Link from "next/link";
 
 export default function Home() {
+  const [bankSampahs, setBankSampahs] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [currentLocation, setCurrentLocation] = useState(null);
+
+  useEffect(() => {
+    // Get current location
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setCurrentLocation([
+            position.coords.latitude,
+            position.coords.longitude,
+          ]);
+        },
+        (error) => console.error(error),
+      );
+    }
+
+    // Fetch bank sampah data
+    const fetchBankSampahs = async () => {
+      try {
+        const response = await fetch("/api/locations");
+        if (!response.ok) throw new Error("Failed to fetch");
+        const data = await response.json();
+        setBankSampahs(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBankSampahs();
+  }, []);
   return (
     <>
       <div className="mb-4 flex gap-8 rounded-md bg-hijau p-4">
@@ -74,12 +110,31 @@ export default function Home() {
       </div> */}
 
       <div className="">
-        <Title text="Bank Sampah" />
+        <div className="flex w-full justify-between">
+          <Title text="Bank Sampah" />
+          <Link href="/bank-sampah" className="text-hijau font-semibold text-xs">
+            Lihat semua
+          </Link>
+        </div>
         <div className="mt-4 flex w-full flex-col">
-          <BankSampah />
-          <BankSampah />
-          <BankSampah />
-          <BankSampah />
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : error ? (
+            <p>Error: {error}</p>
+          ) : (
+                bankSampahs
+                  .slice(0, 5) 
+                  .map((bankSampah) => (
+              <BankSampah
+                id={bankSampah._id}
+                nama={bankSampah.nama}
+                alamat={bankSampah.alamat}
+                latitude={bankSampah.latitude}
+                longitude={bankSampah.longitude}
+                currentLocation={currentLocation}
+              />
+            ))
+          )}
         </div>
       </div>
       <Link
