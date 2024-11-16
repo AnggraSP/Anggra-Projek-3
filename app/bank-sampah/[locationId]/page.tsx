@@ -1,13 +1,21 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 import Recycle from '../../components/elements/Recycle';
-import { BankSampahModel } from '@/types/BankSampahModel';
+
+// Define interface for location data
+interface LocationData {
+  _id: string;
+  nama: string;
+  alamat: string;
+  latitude: number;
+  longitude: number;
+}
 
 export default function BankSampahDetail() {
   const { locationId } = useParams();
-  const [location, setLocation] = useState<BankSampahModel | null>(null);
+  const [location, setLocation] = useState<LocationData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -33,24 +41,24 @@ export default function BankSampahDetail() {
   if (!location) return <div>Loading...</div>;
 
   return (
-      <>
-        <div className="flex justify-between gap-4 mb-8">
-          <Recycle />
+    <>
+      <div className="flex justify-between gap-4 mb-8">
+        <Recycle />
 
-          <div className="flex flex-grow flex-col justify-around">
-              <h1 className="font-poppins text-sm font-semibold">{location.nama}</h1>
-              <p className="text-xs font-semibold text-black_soft">
-                  {location.waktu ? "Buka pukul " + location.waktu : ""}
-              </p>
-          </div>
-          </div>
-          
-        <div className="">
-            <h3 className="mb-2 text-hijau font-semibold text-sm">Alamat Bank Sampah</h3>
-            <p className='text-black_soft text-sm font-semibold'>
-                {location.alamat}
-            </p>
-          </div>
-      </>
+        <div className="flex flex-grow flex-col justify-around">
+          <h1 className="font-poppins text-sm font-semibold">{location.nama}</h1>
+          <p className="text-xs font-semibold text-black_soft">
+            {location.waktu ? "Buka pukul " + location.waktu : ""}
+          </p>
+        </div>
+      </div>
+
+      <div className="">
+        <h3 className="mb-2 text-hijau font-semibold text-sm">Alamat Bank Sampah</h3>
+        <p className='text-black_soft text-sm font-semibold'>
+          {location.alamat}
+        </p>
+      </div>
+    </>
   );
 }
