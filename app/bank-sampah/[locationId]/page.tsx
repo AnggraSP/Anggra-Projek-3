@@ -17,7 +17,11 @@ export default function BankSampahDetail() {
         const data = await response.json();
         setLocation(data);
       } catch (err) {
-        setError(err.message);
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('An unknown error occurred');
+        }
       }
     }
 
