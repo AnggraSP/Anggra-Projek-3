@@ -3,11 +3,12 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Recycle from '../../components/elements/Recycle';
+import { BankSampahModel } from '@/types/BankSampahModel';
 
 export default function BankSampahDetail() {
   const { locationId } = useParams();
-  const [location, setLocation] = useState(null);
-  const [error, setError] = useState(null);
+  const [location, setLocation] = useState<BankSampahModel | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchLocation() {

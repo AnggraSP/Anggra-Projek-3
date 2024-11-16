@@ -1,4 +1,4 @@
-export interface Location {
+export interface BankSampahModel {
   _id: string;
   nama: string;
   alamat: string;
