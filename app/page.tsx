@@ -13,12 +13,21 @@ import BankSampah from "./components/components/BankSampah";
 import ScanFloating from "./components/elements/ScanFloating";
 import Link from "next/link";
 
+interface Coordinates {
+  lat: number;
+  lng: number;
+}
+
+interface BankSampahData {
+  _id: string;
+  nama: string;
+  alamat: string;
+  latitude: number;
+  longitude: number;
+}
+
 export default function Home() {
-  interface Coordinates {
-    lat: number;
-    lng: number;
-  }
-  const [bankSampahs, setBankSampahs] = useState([]);
+  const [bankSampahs, setBankSampahs] = useState<BankSampahData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentLocation, setCurrentLocation] = useState<Coordinates | null>(
@@ -47,11 +56,7 @@ export default function Home() {
         const data = await response.json();
         setBankSampahs(data);
       } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("An unknown error occurred");
-        }
+        setError(err instanceof Error ? err.message : "An unknown error occurred");
       } finally {
         setIsLoading(false);
       }
@@ -136,6 +141,7 @@ export default function Home() {
                   .slice(0, 5) 
                   .map((bankSampah) => (
               <BankSampah
+                key={bankSampah._id}
                 id={bankSampah._id}
                 nama={bankSampah.nama}
                 alamat={bankSampah.alamat}
