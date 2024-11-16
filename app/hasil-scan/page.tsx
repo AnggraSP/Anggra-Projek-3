@@ -42,7 +42,7 @@ export default function HasilScan() {
         <div className="col-span-5 flex flex-col justify-center">
           <h5 className="font-semibold text-hijau">Tempat Sampah:</h5>
           <p className="text-xs text-black_soft">
-            Waran tempat sampah berwarna{" "}
+            Warna tempat sampah berwarna{" "}
             {prediction == "Organik" ? (
                 <span className="font-semibold text-green-600">hijau</span>
             ) : (

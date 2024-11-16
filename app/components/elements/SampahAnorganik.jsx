@@ -137,7 +137,7 @@ function SampahOrganik(props) {
           />
         </defs>
       </svg>
-        <span className="text-center font-poppins text-xs">Organik</span>
+        <span className="text-center font-poppins text-xs">Anorganik</span>
         </div>
     </>
   );

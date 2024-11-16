@@ -10,12 +10,12 @@ const Map = dynamic(() => import('../components/components/Map'), {
 });
 
 export default function BankSampah() { 
-    const [currentLocation, setCurrentLocation] = useState<
-      [number, number] | null
-    >(null);
+    const [currentLocation, setCurrentLocation] = useState<[number, number] | null>(null);
+    const [locations, setLocations] = useState<Location[]>([]);
     const [locationError, setLocationError] = useState<string>("");
 
     useEffect(() => {
+      // Get current location
       if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
@@ -26,9 +26,20 @@ export default function BankSampah() {
             setLocationError(error.message);
           },
         );
-      } else {
-        setLocationError("Geolocation not supported");
       }
+
+      // Fetch locations from API
+      const fetchLocations = async () => {
+        try {
+          const response = await fetch('/api/locations');
+          const data = await response.json();
+          setLocations(data);
+        } catch (error) {
+          console.error('Error fetching locations:', error);
+        }
+      };
+
+      fetchLocations();
     }, []);
   
     return (
@@ -38,7 +49,7 @@ export default function BankSampah() {
           {locationError ? (
             <p className="text-red-500">{locationError}</p>
           ) : (
-            <Map currentLocation={currentLocation} />
+            <Map currentLocation={currentLocation} locations={locations} />
           )}
         </div>
       </div>

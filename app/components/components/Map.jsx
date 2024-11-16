@@ -2,30 +2,29 @@
 
 import { useEffect } from "react";
 import dynamic from "next/dynamic";
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 
 // Fix default marker icon issue
-import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
-import markerIcon from 'leaflet/dist/images/marker-icon.png';
-import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
 const MapContainer = dynamic(
   () => import("react-leaflet").then((mod) => mod.MapContainer),
-  { ssr: false }
+  { ssr: false },
 );
 const TileLayer = dynamic(
   () => import("react-leaflet").then((mod) => mod.TileLayer),
-  { ssr: false }
+  { ssr: false },
 );
 const Marker = dynamic(
   () => import("react-leaflet").then((mod) => mod.Marker),
-  { ssr: false }
+  { ssr: false },
 );
-const Popup = dynamic(
-  () => import("react-leaflet").then((mod) => mod.Popup),
-  { ssr: false }
-);
+const Popup = dynamic(() => import("react-leaflet").then((mod) => mod.Popup), {
+  ssr: false,
+});
 
 // Define icon outside component to avoid recreating it on every render
 const currentLocationIcon = L.divIcon({
@@ -40,17 +39,17 @@ const currentLocationIcon = L.divIcon({
   iconAnchor: [8, 8],
 });
 
-const Map = ({ currentLocation }) => {
-    useEffect(() => {
-      // Fix marker icons
-      delete L.Icon.Default.prototype._getIconUrl;
+const Map = ({ currentLocation, locations }) => {
+  useEffect(() => {
+    // Fix marker icons
+    delete L.Icon.Default.prototype._getIconUrl;
 
-      L.Icon.Default.mergeOptions({
-        iconUrl: markerIcon.src,
-        iconRetinaUrl: markerIcon2x.src,
-        shadowUrl: markerShadow.src,
-      });
-    }, []);
+    L.Icon.Default.mergeOptions({
+      iconUrl: markerIcon.src,
+      iconRetinaUrl: markerIcon2x.src,
+      shadowUrl: markerShadow.src,
+    });
+  }, []);
 
   return (
     <MapContainer
@@ -63,13 +62,23 @@ const Map = ({ currentLocation }) => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+
+      {/* Current location marker */}
       {currentLocation && (
-        <Marker
-          position={currentLocation}
-          icon={currentLocationIcon}>
+        <Marker position={currentLocation} icon={currentLocationIcon}>
           <Popup>Lokasi Anda Saat Ini</Popup>
         </Marker>
       )}
+
+      {/* Location markers from database */}
+      {locations?.map((location) => (
+        <Marker
+          key={location._id}
+          position={[location.latitude, location.longitude]}
+        >
+          <Popup>{location.nama}</Popup>
+        </Marker>
+      ))}
     </MapContainer>
   );
 };
