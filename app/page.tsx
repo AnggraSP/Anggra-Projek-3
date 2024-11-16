@@ -20,7 +20,7 @@ export default function Home() {
   }
   const [bankSampahs, setBankSampahs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [currentLocation, setCurrentLocation] = useState<Coordinates | null>(
     null,
   );
@@ -47,7 +47,11 @@ export default function Home() {
         const data = await response.json();
         setBankSampahs(data);
       } catch (err) {
-        setError(err.message);
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unknown error occurred");
+        }
       } finally {
         setIsLoading(false);
       }

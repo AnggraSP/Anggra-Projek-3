@@ -34,8 +34,8 @@ export default function BankSampah({
 }) {
   const distance = currentLocation ? 
     calculateDistance(
-      currentLocation[0], 
-      currentLocation[1], 
+      currentLocation.lat, 
+      currentLocation.lng, 
       latitude, 
       longitude
     ) : null;
