@@ -14,20 +14,26 @@ import ScanFloating from "./components/elements/ScanFloating";
 import Link from "next/link";
 
 export default function Home() {
+  interface Coordinates {
+    lat: number;
+    lng: number;
+  }
   const [bankSampahs, setBankSampahs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentLocation, setCurrentLocation] = useState(null);
+  const [currentLocation, setCurrentLocation] = useState<Coordinates | null>(
+    null,
+  );
 
   useEffect(() => {
     // Get current location
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setCurrentLocation([
-            position.coords.latitude,
-            position.coords.longitude,
-          ]);
+          setCurrentLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
         },
         (error) => console.error(error),
       );
