@@ -56,6 +56,7 @@ const Map = ({ currentLocation, locations }) => {
 
   const handleLocationClick = (locationId) => {
     router.push(`/bank-sampah/${locationId}`);
+    
   };
 
   return (

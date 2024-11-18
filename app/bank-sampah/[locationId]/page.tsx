@@ -12,6 +12,7 @@ interface LocationData {
   waktu: string;
   latitude: number;
   longitude: number;
+  gambar: string;
 }
 
 export default function BankSampahDetail() {
@@ -43,11 +44,20 @@ export default function BankSampahDetail() {
 
   return (
     <>
-      <div className="flex justify-between gap-4 mb-8">
+      <div className="w-full mb-4">
+        <img
+          className="aspect-video w-full object-cover rounded-lg"
+          src={location.gambar}
+          alt={location.nama}
+        />
+      </div>
+      <div className="mb-8 flex justify-between gap-4">
         <Recycle />
 
         <div className="flex flex-grow flex-col justify-around">
-          <h1 className="font-poppins text-sm font-semibold">{location.nama}</h1>
+          <h1 className="font-poppins text-sm font-semibold">
+            {location.nama}
+          </h1>
           <p className="text-xs font-semibold text-black_soft">
             {location.waktu ? "Buka pukul " + location.waktu : ""}
           </p>
@@ -55,8 +65,10 @@ export default function BankSampahDetail() {
       </div>
 
       <div className="">
-        <h3 className="mb-2 text-hijau font-semibold text-sm">Alamat Bank Sampah</h3>
-        <p className='text-black_soft text-sm font-semibold'>
+        <h3 className="mb-2 text-sm font-semibold text-hijau">
+          Alamat Bank Sampah
+        </h3>
+        <p className="text-sm font-semibold text-black_soft">
           {location.alamat}
         </p>
       </div>

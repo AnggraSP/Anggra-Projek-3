@@ -24,6 +24,7 @@ interface BankSampahData {
   alamat: string;
   latitude: number;
   longitude: number;
+  gambar: string;
 }
 
 export default function Home() {
@@ -51,7 +52,7 @@ export default function Home() {
     // Fetch bank sampah data
     const fetchBankSampahs = async () => {
       try {
-        const response = await fetch("/api/locations");
+        const response = await fetch("/api/bank-sampah");
         if (!response.ok) throw new Error("Failed to fetch");
         const data = await response.json();
         setBankSampahs(data);
@@ -138,7 +139,6 @@ export default function Home() {
             <p>Error: {error}</p>
           ) : (
                 bankSampahs
-                  .slice(0, 5) 
                   .map((bankSampah) => (
               <BankSampah
                 key={bankSampah._id}
@@ -147,6 +147,7 @@ export default function Home() {
                 alamat={bankSampah.alamat}
                 latitude={bankSampah.latitude}
                 longitude={bankSampah.longitude}
+                gambar={bankSampah.gambar}
                 currentLocation={currentLocation}
               />
             ))

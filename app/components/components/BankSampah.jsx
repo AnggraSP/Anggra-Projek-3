@@ -30,6 +30,7 @@ export default function BankSampah({
   alamat, 
   latitude, 
   longitude, 
+  gambar,
   currentLocation 
 }) {
   const distance = currentLocation ? 
@@ -41,26 +42,24 @@ export default function BankSampah({
     ) : null;
 
   return (
-      <Link
-          href={`/bank-sampah/${id}`}
-          className="mb-4 flex w-full gap-4">
-      <div className="flex h-[73px] w-[73px] items-center justify-center rounded-lg bg-hijau">
-        <Image
-          src="/images/banksampah.jpg"
-          alt="Bank Sampah"
-          className="rounded-md"
-          width={63}
-          height={63}
-          objectFit="cover"
-          objectPosition="center"
-        />
-      </div>
-      <div className="">
-        <h3 className="mb-2 line-clamp-1 text-xs font-semibold">{nama}</h3>
-        <h6 className="mb-2 line-clamp-1 text-xs text-black_soft">{alamat}</h6>
-        <span className="me-2 rounded-full border border-hijau px-5 py-1 text-xs font-medium text-hijau">
-          {distance ? `${distance} km` : "Calculating..."}
-        </span>
+    <Link href={`/bank-sampah/${id}`} className="mb-4 w-full">
+      <div className="flex gap-4">
+        <div className="flex-shrink-0 flex h-[73px] w-[73px] items-center justify-center rounded-lg bg-hijau">
+          <img
+            src={gambar}
+            alt="Bank Sampah"
+            className="h-[63px] w-[63px] rounded-md object-cover"
+          />
+        </div>
+        <div className="col-span-3">
+          <h3 className="mb-2 line-clamp-1 text-xs font-semibold">{nama}</h3>
+          <h6 className="mb-2 line-clamp-1 text-xs text-black_soft">
+            {alamat}
+          </h6>
+          <span className="me-2 rounded-full border border-hijau px-5 py-1 text-xs font-medium text-hijau">
+            {distance ? `${distance} km` : "Calculating..."}
+          </span>
+        </div>
       </div>
     </Link>
   );
