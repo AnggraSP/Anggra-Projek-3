@@ -35,8 +35,8 @@ export default function Home() {
     null,
   );
 
+  // Separate location effect
   useEffect(() => {
-    // Get current location
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -48,23 +48,47 @@ export default function Home() {
         (error) => console.error(error),
       );
     }
+  }, []); // Run only once on mount
 
-    // Fetch bank sampah data
+  // Data fetching effect
+  useEffect(() => {
+    let isMounted = true;
+
     const fetchBankSampahs = async () => {
+      if (!isMounted) return;
+
       try {
-        const response = await fetch("/api/bank-sampah");
+        setIsLoading(true);
+        const url = currentLocation
+          ? `/api/bank-sampah?lat=${currentLocation.lat}&lng=${currentLocation.lng}`
+          : "/api/bank-sampah";
+
+        const response = await fetch(url);
         if (!response.ok) throw new Error("Failed to fetch");
         const data = await response.json();
-        setBankSampahs(data);
+
+        if (isMounted) {
+          setBankSampahs(data);
+        }
       } catch (err) {
-        setError(err instanceof Error ? err.message : "An unknown error occurred");
+        if (isMounted) {
+          setError(
+            err instanceof Error ? err.message : "An unknown error occurred",
+          );
+        }
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
 
     fetchBankSampahs();
-  }, []);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [currentLocation]);
   return (
     <>
       <div className="mb-4 flex gap-8 rounded-md bg-hijau p-4">
@@ -104,6 +128,7 @@ export default function Home() {
           alt="Scan sampah"
           width={132} // lebar gambar
           height={132} // tinggi gambar
+          priority={true}
         />
       </div>
 
@@ -128,7 +153,10 @@ export default function Home() {
       <div className="">
         <div className="flex w-full justify-between">
           <Title text="Bank Sampah" />
-          <Link href="/bank-sampah" className="text-hijau font-semibold text-xs">
+          <Link
+            href="/bank-sampah"
+            className="text-xs font-semibold text-hijau"
+          >
             Lihat semua
           </Link>
         </div>
@@ -138,8 +166,7 @@ export default function Home() {
           ) : error ? (
             <p>Error: {error}</p>
           ) : (
-                bankSampahs
-                  .map((bankSampah) => (
+            bankSampahs.map((bankSampah) => (
               <BankSampah
                 key={bankSampah._id}
                 id={bankSampah._id}
