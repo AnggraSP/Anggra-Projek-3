@@ -68,11 +68,7 @@ export default function BankSampah() {
       <div className="h-screen w-full">
         <h1 className="py-4 text-xl font-bold">Bank Sampah</h1>
         <div className="relative z-0 h-[calc(100vh-4rem)]">
-          {locationError ? (
-            <Map locations={locations} />
-          ) : (
             <Map currentLocation={currentLocation} locations={locations} />
-          )}
         </div>
       </div>
     );
