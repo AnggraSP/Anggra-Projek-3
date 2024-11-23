@@ -162,11 +162,11 @@ export default function Home() {
         </div>
         <div className="mt-4 flex w-full flex-col">
           {isLoading ? (
-            <div class="flex h-56 w-full items-center justify-center rounded-lg">
+            <div className="flex h-56 w-full items-center justify-center rounded-lg">
               <div role="status">
                 <svg
                   aria-hidden="true"
-                  class="h-8 w-8 animate-spin fill-hijau text-gray-200"
+                  className="h-8 w-8 animate-spin fill-hijau text-gray-200"
                   viewBox="0 0 100 101"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -180,7 +180,7 @@ export default function Home() {
                     fill="currentFill"
                   />
                 </svg>
-                <span class="sr-only">Loading...</span>
+                <span className="sr-only">Loading...</span>
               </div>
             </div>
           ) : error ? (
