@@ -41,6 +41,8 @@ const currentLocationIcon = L.divIcon({
 });
 
 const Map = ({ currentLocation, locations }) => {
+  const router = useRouter();
+  const defaultCenter = [-6.5938681, 106.7975774];
   useEffect(() => {
     // Fix marker icons
     delete L.Icon.Default.prototype._getIconUrl;
@@ -52,8 +54,6 @@ const Map = ({ currentLocation, locations }) => {
     });
   }, []);
 
-  const router = useRouter();
-
   const handleLocationClick = (locationId) => {
     router.push(`/bank-sampah/${locationId}`);
     
@@ -61,7 +61,7 @@ const Map = ({ currentLocation, locations }) => {
 
   return (
     <MapContainer
-      center={currentLocation || [-6.5979956, 106.7957516]}
+      center={currentLocation ?? defaultCenter}
       zoom={13}
       scrollWheelZoom={true}
       style={{ height: "100%", width: "100%" }}

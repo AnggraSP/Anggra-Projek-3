@@ -44,7 +44,7 @@ export default function BankSampah({
   return (
     <Link href={`/bank-sampah/${id}`} className="mb-4 w-full">
       <div className="flex gap-4">
-        <div className="flex-shrink-0 flex h-[73px] w-[73px] items-center justify-center rounded-lg bg-hijau">
+        <div className="flex h-[73px] w-[73px] flex-shrink-0 items-center justify-center rounded-lg bg-hijau">
           <img
             src={gambar}
             alt="Bank Sampah"
@@ -56,9 +56,11 @@ export default function BankSampah({
           <h6 className="mb-2 line-clamp-1 text-xs text-black_soft">
             {alamat}
           </h6>
-          <span className="me-2 rounded-full border border-hijau px-5 py-1 text-xs font-medium text-hijau">
-            {distance ? `${distance} km` : "Calculating..."}
-          </span>
+          {distance && (
+            <span className="me-2 rounded-full border border-hijau px-5 py-1 text-xs font-medium text-hijau">
+              {`${distance} km`}
+            </span>
+          )}
         </div>
       </div>
     </Link>
